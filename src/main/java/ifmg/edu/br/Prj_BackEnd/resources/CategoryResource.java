@@ -6,11 +6,10 @@ import ifmg.edu.br.Prj_BackEnd.repository.CategoryRepository;
 import ifmg.edu.br.Prj_BackEnd.services.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,9 +32,8 @@ public class CategoryResource {
         // o .ok retorna o código 200, .create seria 201, etc
         // .body é o retorno para o usuário
         return ResponseEntity.ok().body(categories);
-
-        //Dtos é o que é enviado ao front pelo JSON e é transformado em entidades novamente ao voltar para a camada de services
     }
+
     //Passa o que vai diferenciar os gets, nesse caso ele receberá o id
     @GetMapping(value = "/{id}")
     //@PathVariable avisa pro java q é uma variable
@@ -43,5 +41,22 @@ public class CategoryResource {
         CategoryDTO category= categoryService.findById(id);
 
         return ResponseEntity.ok().body(category);
+    }
+
+    @PostMapping
+    public ResponseEntity<CategoryDTO> insert(@RequestBody CategoryDTO dto){
+        dto = categoryService.insert(dto);
+
+        //Pegar o caminho da minha aplicação da requisição atual e adiciona uma nova parte com o id
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(dto);
+    }
+
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<CategoryDTO> update(@PathVariable long id, @RequestBody CategoryDTO dto){
+        dto = categoryService.update(id, dto);
+
+        return ResponseEntity.ok().body(dto);
     }
 }

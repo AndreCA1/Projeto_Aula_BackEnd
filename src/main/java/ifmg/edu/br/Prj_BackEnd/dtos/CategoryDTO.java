@@ -1,6 +1,7 @@
 package ifmg.edu.br.Prj_BackEnd.dtos;
 
 import ifmg.edu.br.Prj_BackEnd.entities.Category;
+//Dtos é o que é enviado ao front pelo JSON e é transformado em entidades novamente ao voltar para a camada de services
 
 public class CategoryDTO {
     private long id;
