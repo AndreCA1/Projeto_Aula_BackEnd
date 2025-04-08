@@ -1,5 +1,6 @@
 package ifmg.edu.br.Prj_BackEnd.resources.Exceptions;
 
+import ifmg.edu.br.Prj_BackEnd.services.exceptions.DataBaseException;
 import ifmg.edu.br.Prj_BackEnd.services.exceptions.ResourceNotFound;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -15,7 +16,7 @@ import java.time.Instant;
 @ControllerAdvice
 public class ResourceExceptionListener {
 
-    //Indica que quando o erro "ResourceNotFound.class" essa função vai ser chamada
+    //Indica que quando o erro "ResourceNotFound.class" essa é a função que deve ser chamada
     @ExceptionHandler(ResourceNotFound.class)
     public ResponseEntity<StandartError> resourceNotFound(ResourceNotFound ex, HttpServletRequest request) {
         StandartError error = new StandartError();
@@ -25,6 +26,20 @@ public class ResourceExceptionListener {
         error.setStatus(status.value());
         error.setMessage(ex.getMessage());
         error.setError("Resource not found");
+        error.setPath(request.getRequestURI());
+
+        return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(DataBaseException.class)
+    public ResponseEntity<StandartError> databaseException(DataBaseException ex, HttpServletRequest request) {
+        StandartError error = new StandartError();
+
+        error.setTimestamp(Instant.now());
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        error.setStatus(status.value());
+        error.setMessage(ex.getMessage());
+        error.setError("Database exception");
         error.setPath(request.getRequestURI());
 
         return ResponseEntity.status(status).body(error);

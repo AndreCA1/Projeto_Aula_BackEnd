@@ -1,3 +1,4 @@
-insert into category (name) values('livros');
-insert into category (name) values('Eletronicos');
-insert into category (name) values('Jogos');
+/* underline _ indica que a próxima letra é maiuscula *\
+insert into category (name, created_at) values('livros', NOW());
+insert into category (name, created_at) values('Eletronicos', NOW());
+insert into category (name, created_at) values('Jogos', NOW());

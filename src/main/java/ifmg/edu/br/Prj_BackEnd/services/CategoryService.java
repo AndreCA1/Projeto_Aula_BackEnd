@@ -6,6 +6,9 @@ import ifmg.edu.br.Prj_BackEnd.repository.CategoryRepository;
 import ifmg.edu.br.Prj_BackEnd.services.exceptions.ResourceNotFound;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,11 +24,13 @@ public class CategoryService {
     private CategoryRepository categoryRepository;
 
     @Transactional(readOnly = true)
-    public List<CategoryDTO> findAll() {
-        List <Category> list = categoryRepository.findAll();
+    public Page<CategoryDTO> findAll(Pageable pageable) {
+        Page <Category> page = categoryRepository.findAll(pageable);
 
-        //Map acessa cada posição do vetor e chama o objeto de x, passa ele para o tipo DTO[" new CategoryDTO(x)) "] e cria uma nova lista do tipo DTO [" collect(Collectors.toList() "]
-        return list.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
+        return page.map(CategoryDTO::new);
+
+        //Para listas: Map acessa cada posição do vetor e chama o objeto de x, passa ele para o tipo DTO[" new CategoryDTO(x)) "] e cria uma nova lista do tipo DTO [" collect(Collectors.toList() "]
+        //return list.stream().map(x -> new CategoryDTO(x)).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
@@ -54,6 +59,19 @@ public class CategoryService {
             return new CategoryDTO(entity);
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFound("Category not found: " + id);
+        }
+    }
+
+    @Transactional
+    public void delete(long id) {
+        if(!categoryRepository.existsById(id)) {
+            throw new ResourceNotFound("Category not found: " + id);
+        }
+
+        try{
+            categoryRepository.deleteById(id);
+        } catch (DataIntegrityViolationException e) { //Erro que aparece no log, nesse caso é o  de chave estrangeira(está sendo referenciado por outra tabela)
+            throw new ResourceNotFound("Integrity violation");
         }
     }
 }

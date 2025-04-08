@@ -2,6 +2,7 @@ package ifmg.edu.br.Prj_BackEnd.entities;
 
 import jakarta.persistence.*;
 
+import java.time.Instant;
 import java.util.Objects;
 
 //Mostra pro java que terá uma tabela no banco dessa classe
@@ -13,6 +14,13 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+
+    //Apenas para alguns bancos de dados, mysql n precisa
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant createdAt;
+    //Apenas para alguns bancos de dados, mysql n precisa
+    @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
+    private Instant updatedAt;
 
     public Category(long id, String name) {
         this.name = name;
@@ -55,4 +63,28 @@ public class Category {
                 ", name='" + name + '\'' +
                 '}';
     }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
+
+    //O usuario não ira mexer nas variaveis pre Persist e Update
+
+    //Chama esse metodo sempre que o objeto for criado
+    @PrePersist
+    private void prePersist() {
+        //pega a hora atual
+        createdAt = Instant.now();
+    }
+
+    //Chama esse metodo sempre que o objeto for alterado
+    @PreUpdate
+    private void preUpdate() {
+        updatedAt = Instant.now();
+    }
+
 }
