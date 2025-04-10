@@ -56,6 +56,7 @@ public class CategoryResource {
 
     //Define a resposta para um metodo post
     @PostMapping
+    //ResquestBody (Receberei esse parametro no corpo da mensagem)
     public ResponseEntity<CategoryDTO> insert(@RequestBody CategoryDTO dto){
         dto = categoryService.insert(dto);
 
