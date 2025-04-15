@@ -13,6 +13,7 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    @Column(columnDefinition = "TEXT")
     private String description;
     private double price;
     private String imageURL;
@@ -26,7 +27,7 @@ public class Product {
     @ManyToMany
 
     //Cria a forma da table join pega o tipo dessa tabela, inverse da outra
-    @JoinTable(name = "producty_category", joinColumns = @JoinColumn(name = "producty_id"),
+    @JoinTable(name = "product_category", joinColumns = @JoinColumn(name = "product_id"),
             inverseJoinColumns = @JoinColumn(name = "category_id"))
     private Set<Category> categories = new HashSet<>();
 

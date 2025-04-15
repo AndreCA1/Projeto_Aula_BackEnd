@@ -1,6 +1,8 @@
 package ifmg.edu.br.Prj_BackEnd.services;
 
+import ifmg.edu.br.Prj_BackEnd.dtos.CategoryDTO;
 import ifmg.edu.br.Prj_BackEnd.dtos.ProductDTO;
+import ifmg.edu.br.Prj_BackEnd.entities.Category;
 import ifmg.edu.br.Prj_BackEnd.entities.Product;
 import ifmg.edu.br.Prj_BackEnd.repository.CategoryRepository;
 import ifmg.edu.br.Prj_BackEnd.repository.ProductRepository;
@@ -89,5 +91,6 @@ public class ProductService {
         entity.setDescription(dto.getDescription());
         entity.setPrice(dto.getPrice());
         entity.setImageURL(dto.getImageURL());
+        dto.getCategories().forEach(c -> entity.getCategories().add(new Category(c)));
     }
 }

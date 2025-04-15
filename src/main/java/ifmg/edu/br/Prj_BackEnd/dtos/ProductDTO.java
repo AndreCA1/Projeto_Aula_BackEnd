@@ -79,6 +79,10 @@ public class ProductDTO {
         this.id = id;
     }
 
+    public Set<CategoryDTO> getCategories() {
+        return categories;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (!(o instanceof ProductDTO product)) return false;

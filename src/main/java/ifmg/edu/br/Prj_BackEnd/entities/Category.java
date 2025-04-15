@@ -1,5 +1,6 @@
 package ifmg.edu.br.Prj_BackEnd.entities;
 
+import ifmg.edu.br.Prj_BackEnd.dtos.CategoryDTO;
 import jakarta.persistence.*;
 
 import java.time.Instant;
@@ -22,12 +23,17 @@ public class Category {
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant updatedAt;
 
+    public Category() {}
+
     public Category(long id, String name) {
         this.name = name;
         this.id = id;
     }
 
-    public Category() {}
+    public Category(CategoryDTO dto) {
+        this.id = dto.getId();
+        this.name = dto.getName();
+    }
 
     public long getId() {
         return id;
