@@ -12,6 +12,6 @@ import org.springframework.context.annotation.Configuration;
 public class OpenApiConfig {
     @Bean
     public OpenAPI customOpenAPI() {
-        return new OpenAPI().info(new Info().title("Projeto Aula BackEnd").version("1.0").license( new License().name("Apache 2.0").url("https://www.ifmg.edu.br")));
+        return new OpenAPI().info(new Info().title("Projeto Aula BackEnd").version("1.0").license(new License().name("Apache 2.0").url("https://www.ifmg.edu.br")));
     }
 }

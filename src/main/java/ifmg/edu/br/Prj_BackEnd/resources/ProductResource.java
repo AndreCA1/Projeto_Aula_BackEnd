@@ -2,6 +2,9 @@ package ifmg.edu.br.Prj_BackEnd.resources;
 
 import ifmg.edu.br.Prj_BackEnd.dtos.ProductDTO;
 import ifmg.edu.br.Prj_BackEnd.services.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,11 +17,23 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/product")
+//Descrição dele no swagger
+@Tag(name = "Product", description = "Controller/Resource for product")
 public class ProductResource {
     @Autowired
     private ProductService productService;
 
-    @GetMapping
+    //Muda o tipo de retorno e altera no swagger
+    @GetMapping(produces = "application/json")
+    @Operation(
+            description = "Find all",
+            summary = "Find all",
+            responses = {
+                    @ApiResponse(description = "Ok", responseCode = "200"),
+                    @ApiResponse(description = "Bad request", responseCode = "400"),
+                    @ApiResponse(description = "UnAuthorized", responseCode = "401"),
+                    @ApiResponse(description = "Forbidden", responseCode = "403")
+            })
     //Pageable tem todas as propridades de paginação
     public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable) {
         Page<ProductDTO> products = productService.findAll(pageable);
@@ -26,13 +41,32 @@ public class ProductResource {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping(value = "/{id}")
+    @GetMapping(value = "/{id}", produces = "application/json")
+    @Operation(
+            description = "Find product by ID",
+            summary = "Find product by ID",
+            responses = {
+                    @ApiResponse(description = "Ok", responseCode = "200"),
+                    @ApiResponse(description = "Bad request", responseCode = "400"),
+                    @ApiResponse(description = "UnAuthorized", responseCode = "401"),
+                    @ApiResponse(description = "Forbidden", responseCode = "403"),
+                    @ApiResponse(description = "NotFound", responseCode = "404")
+            })
     public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
         ProductDTO products = productService.findById(id);
         return ResponseEntity.ok(products);
     }
 
-    @PostMapping
+    @PostMapping(produces = "application/json")
+    @Operation(
+            description = "Create a new Product",
+            summary = "Create a new Product",
+            responses = {
+                    @ApiResponse(description = "created", responseCode = "201"),
+                    @ApiResponse(description = "Bad request", responseCode = "400"),
+                    @ApiResponse(description = "UnAuthorized", responseCode = "401"),
+                    @ApiResponse(description = "Forbidden", responseCode = "403")
+        })
     public ResponseEntity<ProductDTO> insert(@RequestBody ProductDTO dto) {
         dto = productService.insert(dto);
 
@@ -42,12 +76,33 @@ public class ProductResource {
         return ResponseEntity.created(uri).body(dto);
     }
 
-    @PutMapping(value = "/{id}")
+    @PutMapping(value = "/{id}", produces = "application/json")
+    @Operation(
+            description = "Update product",
+            summary = "Update product",
+            responses = {
+                    @ApiResponse(description = "Ok", responseCode = "200"),
+                    @ApiResponse(description = "Bad request", responseCode = "400"),
+                    @ApiResponse(description = "UnAuthorized", responseCode = "401"),
+                    @ApiResponse(description = "Forbidden", responseCode = "403"),
+                    @ApiResponse(description = "NotFound", responseCode = "404")
+            })
     public ResponseEntity<ProductDTO> update(@PathVariable Long id, @RequestBody ProductDTO dto) {
         dto = productService.update(id, dto);
         return ResponseEntity.ok(dto);
     }
+
     @DeleteMapping(value = "/{id}")
+    @Operation(
+            description = "Delete product",
+            summary = "Delete product",
+            responses = {
+                    @ApiResponse(description = "Ok", responseCode = "200"),
+                    @ApiResponse(description = "Bad request", responseCode = "400"),
+                    @ApiResponse(description = "UnAuthorized", responseCode = "401"),
+                    @ApiResponse(description = "Forbidden", responseCode = "403"),
+                    @ApiResponse(description = "NotFound", responseCode = "404")
+            })
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         productService.delete(id);
         return ResponseEntity.noContent().build();
