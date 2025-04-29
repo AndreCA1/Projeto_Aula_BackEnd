@@ -56,11 +56,11 @@ public class ProductService {
 
         //Converte o produto e suas categorias em DTO
         return new ProductDTO(product)
-//                .add(linkTo(methodOn(ProductResource.class).findById(product.getId())).withSelfRel())
-//                .add(linkTo(methodOn(ProductResource.class).findAll()).withRel("All Products"))
-//                .add(linkTo(methodOn(ProductResource.class).update()).withRel("Update Product"))
-//                .add(linkTo(methodOn(ProductResource.class).delete(product.getId())).withRel("Delete Product"))
-                ;
+            .add(linkTo(methodOn(ProductResource.class).findById(product.getId())).withSelfRel())
+            .add(linkTo(methodOn(ProductResource.class).findAll(null)).withRel("All Products"))
+            .add(linkTo(methodOn(ProductResource.class).update(product.getId(), null)).withRel("Update Product"))
+            .add(linkTo(methodOn(ProductResource.class).delete(product.getId())).withRel("Delete Product"))
+        ;
     }
 
     @Transactional
@@ -74,7 +74,12 @@ public class ProductService {
         //Salva no BD e pega o id
         entity = productRepository.save(entity);
         //Retorna em DTO
-        return new ProductDTO(entity);
+        return new ProductDTO(entity)
+                    .add(linkTo(methodOn(ProductResource.class).findById(entity.getId())).withRel("Find a Product"))
+                    .add(linkTo(methodOn(ProductResource.class).findAll(null)).withRel("All Products"))
+                    .add(linkTo(methodOn(ProductResource.class).update(entity.getId(), new ProductDTO(entity))).withRel("Update Product"))
+                    .add(linkTo(methodOn(ProductResource.class).delete(entity.getId())).withRel("Delete Product"))
+                ;
     }
 
     @Transactional
@@ -84,7 +89,11 @@ public class ProductService {
             //joga o q está no dto para o entity
             copyDtoToEntity(dto, entity);
             entity = productRepository.save(entity);
-            return new ProductDTO(entity);
+            return new ProductDTO(entity)
+                    .add(linkTo(methodOn(ProductResource.class).findById(entity.getId())).withRel("Find a Product"))
+                    .add(linkTo(methodOn(ProductResource.class).findAll(null)).withRel("All Products"))
+                    .add(linkTo(methodOn(ProductResource.class).delete(entity.getId())).withRel("Delete Product"))
+                    ;
         } catch (EntityNotFoundException e) {
             throw new ResourceNotFound("Product not found: " + id);
         }
