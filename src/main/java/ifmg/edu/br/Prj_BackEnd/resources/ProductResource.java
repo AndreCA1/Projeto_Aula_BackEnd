@@ -20,6 +20,8 @@ import java.net.URI;
 //Descrição dele no swagger
 @Tag(name = "Product", description = "Controller/Resource for product")
 public class ProductResource {
+
+
     @Autowired
     private ProductService productService;
 

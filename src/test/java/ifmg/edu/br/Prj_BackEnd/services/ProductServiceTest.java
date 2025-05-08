@@ -21,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
+
 //Moka os dados(define os dados base para teste)
 @ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
@@ -75,5 +77,19 @@ class ProductServiceTest {
 
         Assertions.assertNotNull(result);
         verify(productRepository, times(1)).findAll(pagina);
+    }
+
+    @Test
+    @DisplayName("Verificando a busca de um produto por um ID existente")
+    void findByIdShouldReturnProductWhenIdExists() {
+        Product product = Factory.createProduct();
+        product.setId(existingId);
+        when(productRepository.findById(existingId)).thenReturn(Optional.of(product));
+
+        ProductDTO dto = productService.findById(existingId);
+        Assertions.assertNotNull(dto);
+        Assertions.assertEquals(existingId, dto.getId());
+
+        verify(productRepository, times(1)).findById(existingId);
     }
 }
