@@ -4,7 +4,9 @@ import ifmg.edu.br.Prj_BackEnd.dtos.CategoryDTO;
 import jakarta.persistence.*;
 
 import java.time.Instant;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 //Mostra pro java que terá uma tabela no banco dessa classe
 @Entity
@@ -22,6 +24,11 @@ public class Category {
     //Apenas para alguns bancos de dados, mysql n precisa
     @Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
     private Instant updatedAt;
+
+    //Relacionamento bidirecional
+    //Todos os produtos daquela categoria, LAZY faz o java buscar esses dados no Banco apenas quando for chamado .products (EAGER ja tras direto)
+    @ManyToMany(mappedBy = "categories", fetch = FetchType.LAZY)
+    private Set<Product> products = new HashSet<>();
 
     public Category() {}
 
@@ -93,4 +100,11 @@ public class Category {
         updatedAt = Instant.now();
     }
 
+    public Set<Product> getProducts() {
+        return products;
+    }
+
+    public void setProducts(Set<Product> products) {
+        this.products = products;
+    }
 }

@@ -12,12 +12,12 @@ public class Factory {
         product.setDescription("Iphone 16 Pro Max krl a 4");
         product.setPrice(5000);
         product.setImageURL("https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/25-big.jpg");
-        product.getCategories().add(new Category(60L, "News"));
+        product.getCategories().add(new Category(1L, "Livros"));
         return product;
     }
 
     public static ProductDTO createProductDTO(){
         Product p = createProduct();
-        return new ProductDTO();
+        return new ProductDTO(p);
     }
 }
