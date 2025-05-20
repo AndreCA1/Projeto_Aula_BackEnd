@@ -1,7 +1,11 @@
 package ifmg.edu.br.Prj_BackEnd.resources;
 
 import ifmg.edu.br.Prj_BackEnd.dtos.ProductDTO;
+import ifmg.edu.br.Prj_BackEnd.dtos.UserDTO;
+import ifmg.edu.br.Prj_BackEnd.dtos.UserInsertDTO;
+import ifmg.edu.br.Prj_BackEnd.entities.User;
 import ifmg.edu.br.Prj_BackEnd.services.ProductService;
+import ifmg.edu.br.Prj_BackEnd.services.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -17,20 +21,19 @@ import java.net.URI;
 
 
 @RestController
-@RequestMapping("/product")
+@RequestMapping("/user")
 //Descrição dele no swagger
-@Tag(name = "Product", description = "Controller/Resource for product")
-public class ProductResource {
-
+@Tag(name = "User", description = "Controller/Resource for users")
+public class UserResource {
 
     @Autowired
-    private ProductService productService;
+    private UserService userService;
 
     //Muda o tipo de retorno e altera no swagger
     @GetMapping(produces = "application/json")
     @Operation(
-            description = "Find all",
-            summary = "Find all",
+            description = "Find all users",
+            summary = "Find all users",
             responses = {
                     @ApiResponse(description = "Ok", responseCode = "200"),
                     @ApiResponse(description = "Bad request", responseCode = "400"),
@@ -38,16 +41,16 @@ public class ProductResource {
                     @ApiResponse(description = "Forbidden", responseCode = "403")
             })
     //Pageable tem todas as propridades de paginação
-    public ResponseEntity<Page<ProductDTO>> findAll(Pageable pageable) {
-        Page<ProductDTO> products = productService.findAll(pageable);
+    public ResponseEntity<Page<UserDTO>> findAll(Pageable pageable) {
+        Page<UserDTO> users = userService.findAll(pageable);
         //Nova sintaxe
-        return ResponseEntity.ok(products);
+        return ResponseEntity.ok(users);
     }
 
     @GetMapping(value = "/{id}", produces = "application/json")
     @Operation(
-            description = "Find product by ID",
-            summary = "Find product by ID",
+            description = "Find user by ID",
+            summary = "Find user by ID",
             responses = {
                     @ApiResponse(description = "Ok", responseCode = "200"),
                     @ApiResponse(description = "Bad request", responseCode = "400"),
@@ -55,34 +58,34 @@ public class ProductResource {
                     @ApiResponse(description = "Forbidden", responseCode = "403"),
                     @ApiResponse(description = "NotFound", responseCode = "404")
             })
-    public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
-        ProductDTO products = productService.findById(id);
-        return ResponseEntity.ok(products);
+    public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
+        UserDTO user = userService.findById(id);
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping(produces = "application/json")
     @Operation(
-            description = "Create a new Product",
-            summary = "Create a new Product",
+            description = "Create a new user",
+            summary = "Create a new user",
             responses = {
                     @ApiResponse(description = "created", responseCode = "201"),
                     @ApiResponse(description = "Bad request", responseCode = "400"),
                     @ApiResponse(description = "UnAuthorized", responseCode = "401"),
                     @ApiResponse(description = "Forbidden", responseCode = "403")
         })
-    public ResponseEntity<ProductDTO> insert(@Valid @RequestBody ProductDTO dto) {
-        dto = productService.insert(dto);
+    public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserInsertDTO dto) {
+        UserDTO user = userService.insert(dto);
 
         //Pegar o caminho da minha aplicação da requisição atual e adiciona uma nova parte com o id
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.getId()).toUri();
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(dto);
+        return ResponseEntity.created(uri).body(user);
     }
 
     @PutMapping(value = "/{id}", produces = "application/json")
     @Operation(
-            description = "Update product",
-            summary = "Update product",
+            description = "Update user",
+            summary = "Update user",
             responses = {
                     @ApiResponse(description = "Ok", responseCode = "200"),
                     @ApiResponse(description = "Bad request", responseCode = "400"),
@@ -90,15 +93,15 @@ public class ProductResource {
                     @ApiResponse(description = "Forbidden", responseCode = "403"),
                     @ApiResponse(description = "NotFound", responseCode = "404")
             })
-    public ResponseEntity<ProductDTO> update(@Valid @PathVariable Long id, @RequestBody ProductDTO dto) {
-        dto = productService.update(id, dto);
+    public ResponseEntity<UserDTO> update(@Valid @PathVariable Long id, @RequestBody UserDTO dto) {
+        dto = userService.update(id, dto);
         return ResponseEntity.ok(dto);
     }
 
     @DeleteMapping(value = "/{id}")
     @Operation(
-            description = "Delete product",
-            summary = "Delete product",
+            description = "Delete user",
+            summary = "Delete user",
             responses = {
                     @ApiResponse(description = "Ok", responseCode = "200"),
                     @ApiResponse(description = "Bad request", responseCode = "400"),
@@ -107,7 +110,7 @@ public class ProductResource {
                     @ApiResponse(description = "NotFound", responseCode = "404")
             })
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        productService.delete(id);
+        userService.delete(id);
         return ResponseEntity.noContent().build();
     }
 }
