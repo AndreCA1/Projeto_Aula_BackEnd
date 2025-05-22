@@ -6,6 +6,7 @@ import ifmg.edu.br.Prj_BackEnd.dtos.UserInsertDTO;
 import ifmg.edu.br.Prj_BackEnd.entities.Product;
 import ifmg.edu.br.Prj_BackEnd.entities.Role;
 import ifmg.edu.br.Prj_BackEnd.entities.User;
+import ifmg.edu.br.Prj_BackEnd.projections.UserDetailsProjection;
 import ifmg.edu.br.Prj_BackEnd.repository.RoleRepository;
 import ifmg.edu.br.Prj_BackEnd.repository.UserRepository;
 import ifmg.edu.br.Prj_BackEnd.resources.ProductResource;
@@ -17,10 +18,14 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.authorization.method.AuthorizeReturnObject;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -28,7 +33,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 
 @Service
-public class UserService {
+public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository repository;
@@ -102,5 +107,22 @@ public class UserService {
             Role roleEntity = roleRepository.getReferenceById(role.getId());
             entity.getRoles().add(roleEntity);
         }
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        List<UserDetailsProjection> result = repository.searchUserByAndRoleByEmail(username);
+
+        if (result.isEmpty()){
+            throw new UsernameNotFoundException("User not found");
+        }
+
+        User user = new User();
+        user.setEmail(result.get(0).getUsername());
+        user.setPassword(result.get(1).getPassword());
+        for (UserDetailsProjection p : result){
+            user.addRole(new Role(p.getRoleId(), p.getAuthority()));
+        }
+        return user;
     }
 }

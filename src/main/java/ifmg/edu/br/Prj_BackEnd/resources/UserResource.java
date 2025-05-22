@@ -109,6 +109,7 @@ public class UserResource {
                     @ApiResponse(description = "Forbidden", responseCode = "403"),
                     @ApiResponse(description = "NotFound", responseCode = "404")
             })
+
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.noContent().build();
