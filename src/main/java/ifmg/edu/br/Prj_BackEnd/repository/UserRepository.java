@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
                            r.id as RoleId,
                            r.authority
                     FROM tb_user u 
-                        INNER JOIN userRole ur 
+                        INNER JOIN user_role ur 
                                 ON u.id = ur.user_id 
                                     INNER JOIN role r 
                                         ON r.id = ur.role_id
