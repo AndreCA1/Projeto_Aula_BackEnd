@@ -1,6 +1,7 @@
 package ifmg.edu.br.Prj_BackEnd.services;
 
 import ifmg.edu.br.Prj_BackEnd.dtos.ProductDTO;
+import ifmg.edu.br.Prj_BackEnd.dtos.ProductListDTO;
 import ifmg.edu.br.Prj_BackEnd.entities.Category;
 import ifmg.edu.br.Prj_BackEnd.entities.Product;
 import ifmg.edu.br.Prj_BackEnd.repository.CategoryRepository;
@@ -9,6 +10,7 @@ import ifmg.edu.br.Prj_BackEnd.resources.ProductResource;
 import ifmg.edu.br.Prj_BackEnd.services.exceptions.DataBaseException;
 import ifmg.edu.br.Prj_BackEnd.services.exceptions.ResourceNotFound;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.constraints.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -115,5 +117,9 @@ public class ProductService {
         entity.setPrice(dto.getPrice());
         entity.setImageURL(dto.getImageURL());
         dto.getCategories().forEach(c -> entity.getCategories().add(new Category(c)));
+    }
+
+    public Page<ProductListDTO> findAllPaged(String name, String categoryId, Pageable pageable) {
+        return null;
     }
 }

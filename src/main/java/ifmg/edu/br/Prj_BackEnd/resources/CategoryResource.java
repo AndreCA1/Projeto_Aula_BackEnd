@@ -56,7 +56,7 @@ public class CategoryResource {
     }
 
     //Define a resposta para um metodo post
-    @PreAuthorize("HasAnyAuthoriry('ROLE_ADMIN', 'ROLE_OPERATOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_OPERATOR')")
     @PostMapping
     //ResquestBody (Receberei esse parametro no corpo da mensagem)
     public ResponseEntity<CategoryDTO> insert(@RequestBody CategoryDTO dto){
@@ -70,7 +70,7 @@ public class CategoryResource {
 
     //Define a resposta para um metodo put(editar) + caminho
     @PutMapping(value = "/{id}")
-    @PreAuthorize("HasAnyAuthoriry('ROLE_ADMIN', 'ROLE_OPERATOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_OPERATOR')")
     public ResponseEntity<CategoryDTO> update(@PathVariable long id, @RequestBody CategoryDTO dto){
         dto = categoryService.update(id, dto);
 
@@ -79,7 +79,7 @@ public class CategoryResource {
 
     //Define a resposta para um metodo delet(deletar) + caminho
     @DeleteMapping(value = "/{id}")
-    @PreAuthorize("HasAnyAuthoriry('ROLE_ADMIN', 'ROLE_OPERATOR')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_OPERATOR')")
     public ResponseEntity<Void> delete(@PathVariable long id){
         categoryService.delete(id);
         return ResponseEntity.noContent().build();

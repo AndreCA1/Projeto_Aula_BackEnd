@@ -42,7 +42,7 @@ public class UserResource {
                     @ApiResponse(description = "Forbidden", responseCode = "403")
             })
     //Pageable tem todas as propridades de paginação
-    @PreAuthorize("HasAnyAuthoriry('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<Page<UserDTO>> findAll(Pageable pageable) {
         Page<UserDTO> users = userService.findAll(pageable);
         //Nova sintaxe
@@ -60,7 +60,7 @@ public class UserResource {
                     @ApiResponse(description = "Forbidden", responseCode = "403"),
                     @ApiResponse(description = "NotFound", responseCode = "404")
             })
-    @PreAuthorize("HasAnyAuthoriry('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
         UserDTO user = userService.findById(id);
         return ResponseEntity.ok(user);
@@ -76,7 +76,7 @@ public class UserResource {
                     @ApiResponse(description = "UnAuthorized", responseCode = "401"),
                     @ApiResponse(description = "Forbidden", responseCode = "403")
         })
-    @PreAuthorize("HasAnyAuthoriry('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<UserDTO> insert(@Valid @RequestBody UserInsertDTO dto) {
         UserDTO user = userService.insert(dto);
 
@@ -97,7 +97,7 @@ public class UserResource {
                     @ApiResponse(description = "Forbidden", responseCode = "403"),
                     @ApiResponse(description = "NotFound", responseCode = "404")
             })
-    @PreAuthorize("HasAnyAuthoriry('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<UserDTO> update(@Valid @PathVariable Long id, @RequestBody UserDTO dto) {
         dto = userService.update(id, dto);
         return ResponseEntity.ok(dto);
@@ -115,7 +115,7 @@ public class UserResource {
                     @ApiResponse(description = "NotFound", responseCode = "404")
             })
 
-    @PreAuthorize("HasAnyAuthoriry('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         userService.delete(id);
         return ResponseEntity.noContent().build();

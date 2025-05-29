@@ -3,6 +3,7 @@ package ifmg.edu.br.Prj_BackEnd.resources;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ifmg.edu.br.Prj_BackEnd.dtos.ProductDTO;
 import ifmg.edu.br.Prj_BackEnd.util.Factory;
+import ifmg.edu.br.Prj_BackEnd.util.TokenUtil;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,13 +31,23 @@ public class ProductResourceIT {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private TokenUtil tokenUtil;
+    private String username;
+    private String password;
+    private String token;
+
     private long existingId;
     private long nonExistingId;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception { //Para tratar excecao do tokenUtil
         existingId = 1L;
         nonExistingId = 2000L;
+
+        username = "maria@gmail.com";
+        password = "123456";
+        token = tokenUtil.obtainAccessToken(mockMvc, username, password);
     }
 
     @Test
@@ -59,6 +70,7 @@ public class ProductResourceIT {
         String json = objectMapper.writeValueAsString(dto);
 
         ResultActions result = mockMvc.perform(put("/product/{id}", existingId)
+                .header("Authorization", "Bearer " + token)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -77,6 +89,7 @@ public class ProductResourceIT {
         String json = objectMapper.writeValueAsString(dto);
 
         ResultActions result = mockMvc.perform(put("/product/{id}", nonExistingId)
+                .header("Authorization", "Bearer " + token)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -94,6 +107,7 @@ public class ProductResourceIT {
         String json = objectMapper.writeValueAsString(dto);
 
         ResultActions result = mockMvc.perform(post("/product")
+                .header("Authorization", "Bearer " + token)
                 .content(json)
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON));
@@ -106,14 +120,16 @@ public class ProductResourceIT {
     @Test
     public void deleteShouldReturnNoContentWhenIdExists() throws Exception {
 
-        ResultActions result = mockMvc.perform(delete("/product/{id}", existingId));
+        ResultActions result = mockMvc.perform(delete("/product/{id}", existingId)
+                .header("Authorization", "Bearer " + token));
 
         result.andExpect(status().isNoContent());
     }
 
     @Test
     public void deleteShouldReturnNotFoundWhenIdDoesNotExists() throws Exception {
-        ResultActions result = mockMvc.perform(delete("/product/{id}", nonExistingId));
+        ResultActions result = mockMvc.perform(delete("/product/{id}", nonExistingId)
+                .header("Authorization", "Bearer " + token));
 
         result.andExpect(status().isNotFound());
     }
