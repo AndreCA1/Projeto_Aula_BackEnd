@@ -13,6 +13,7 @@ import ifmg.edu.br.Prj_BackEnd.resources.ProductResource;
 import ifmg.edu.br.Prj_BackEnd.services.exceptions.DataBaseException;
 import ifmg.edu.br.Prj_BackEnd.services.exceptions.ResourceNotFound;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
@@ -124,5 +125,20 @@ public class UserService implements UserDetailsService {
             user.addRole(new Role(p.getRoleId(), p.getAuthority()));
         }
         return user;
+    }
+
+    public UserDTO signup(@Valid UserInsertDTO dto) {
+        User entity = new User();
+
+        copyDtoToEntity(dto, entity);
+        entity.setPassword(passwordEncoder.encode(dto.getPassword()));
+
+        Role role = roleRepository.findByAuthority("ROLE_OPERATOR");
+        entity.getRoles().clear();
+        entity.getRoles().add(role);
+
+        User novo = repository.save(entity);
+
+        return new UserDTO(novo);
     }
 }

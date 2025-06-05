@@ -86,6 +86,25 @@ public class UserResource {
         return ResponseEntity.created(uri).body(user);
     }
 
+    @PostMapping(value = "/signup", produces = "application/json")
+    @Operation(
+            description = "Sign up",
+            summary = "You can sign up.",
+            responses = {
+                    @ApiResponse(description = "created", responseCode = "201"),
+                    @ApiResponse(description = "Bad request", responseCode = "400"),
+                    @ApiResponse(description = "UnAuthorized", responseCode = "401"),
+                    @ApiResponse(description = "Forbidden", responseCode = "403")
+            })
+    public ResponseEntity<UserDTO> signup(@Valid @RequestBody UserInsertDTO dto) {
+        UserDTO user = userService.signup(dto);
+
+        //Pegar o caminho da minha aplicação da requisição atual e adiciona uma nova parte com o id
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
+
+        return ResponseEntity.created(uri).body(user);
+    }
+
     @PutMapping(value = "/{id}", produces = "application/json")
     @Operation(
             description = "Update user",

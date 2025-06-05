@@ -19,7 +19,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                     (select DISTINCT p.ID , p.NAME , p.IMAGEURL , p.PRICE
                     from PRODUCT p
                     inner Join PRODUCT_CATEGORY  pc on PRODUCT_ID = p.id
-                    where (:categoriesID IS NULL || pc.CATEGORY_ID  in :categoriesID) and lower(p.name) like lower(CONCAT'%',:name,'%'))
+                    where (pc.CATEGORY_ID  in :categoriesID) and lower(p.name) like lower(CONCAT ('%',:name,'%'))
                     ) as result
                 """,
         countQuery = """
@@ -27,9 +27,29 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                         (select DISTINCT p.ID , p.NAME , p.IMAGEURL , p.PRICE
                         from PRODUCT p
                         inner Join PRODUCT_CATEGORY  pc on PRODUCT_ID = p.id
-                        where (:categoriesID IS NULL || pc.CATEGORY_ID  in :categoriesID) and lower(p.name) like lower(CONCAT'%',:name,'%'))
+                        where (pc.CATEGORY_ID  in :categoriesID) and lower(p.name) like lower (CONCAT ('%',:name,'%'))
                         ) as result
                     """
     )
-    public Page<ProductProjection> searchProducts(List<Long> categoriesID, String name, Pageable pageable);
+    public Page<ProductProjection> searchProductsWithCategories(List<Long> categoriesID, String name, Pageable pageable);
+
+    @Query(nativeQuery = true,
+            value = """
+                    select * from
+                    (select DISTINCT p.ID , p.NAME , p.IMAGEURL , p.PRICE
+                    from PRODUCT p
+                    inner Join PRODUCT_CATEGORY  pc on PRODUCT_ID = p.id
+                    where lower(p.name) like lower(CONCAT ('%',:name,'%'))
+                    ) as result
+                """,
+            countQuery = """
+                        select count(*) from
+                        (select DISTINCT p.ID , p.NAME , p.IMAGEURL , p.PRICE
+                        from PRODUCT p
+                        inner Join PRODUCT_CATEGORY  pc on PRODUCT_ID = p.id
+                        where lower(p.name) like lower(CONCAT ('%',:name,'%'))
+                        ) as result
+                    """
+    )
+    Page<ProductProjection> searchProductsWithoutCategories(String name, Pageable pageable);
 }

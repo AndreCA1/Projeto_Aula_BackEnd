@@ -1,7 +1,17 @@
+create table category (created_at TIMESTAMP null, id bigint not null auto_increment, updated_at TIMESTAMP null, name varchar(255), primary key (id)) engine=InnoDB;
+create table product (price float(53) not null, created_at TIMESTAMP null, id bigint not null auto_increment, updated_at TIMESTAMP null, description TEXT, imageurl varchar(255), name varchar(255), primary key (id)) engine=InnoDB;
+create table product_category (category_id bigint not null, product_id bigint not null, primary key (category_id, product_id)) engine=InnoDB;
+create table role (id bigint not null auto_increment, authority varchar(255), primary key (id)) engine=InnoDB;
+create table tb_user (id bigint not null auto_increment, email varchar(255), first_name varchar(255), last_name varchar(255), password varchar(255), primary key (id)) engine=InnoDB;
+create table user_role (role_id bigint not null, user_id bigint not null, primary key (role_id, user_id)) engine=InnoDB;
+alter table tb_user add constraint UK4vih17mube9j7cqyjlfbcrk4m unique (email);
+alter table product_category add constraint FKkud35ls1d40wpjb5htpp14q4e foreign key (category_id) references category (id);
+alter table product_category add constraint FK2k3smhbruedlcrvu6clued06x foreign key (product_id) references product (id);
+alter table user_role add constraint FKa68196081fvovjhkek5m97n3y foreign key (role_id) references role (id);
+alter table user_role add constraint FK430om9qnxgilp5cvcbeyovi37 foreign key (user_id) references tb_user (id);
 INSERT INTO category (name, created_At) VALUES ('Livros', NOW());
 INSERT INTO category (name, created_At) VALUES ('Eletrônicos', NOW());
 INSERT INTO category (name, created_At) VALUES ('Computadores', NOW());
-
 INSERT INTO product (name, price, created_At, description, imageURL) VALUES ('The Lord of the Rings', 90.5, NOW(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/1-big.jpg');
 INSERT INTO product (name, price, created_At, description, imageURL) VALUES ('Smart TV', 2190.0, NOW(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/2-big.jpg');
 INSERT INTO product (name, price, created_At, description, imageURL) VALUES ('Macbook Pro', 1250.0, NOW(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/3-big.jpg');
@@ -27,7 +37,6 @@ INSERT INTO product (name, price, created_At, description, imageURL) VALUES ('PC
 INSERT INTO product (name, price, created_At, description, imageURL) VALUES ('PC Gamer Min', 2250.0, NOW(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/23-big.jpg');
 INSERT INTO product (name, price, created_At, description, imageURL) VALUES ('PC Gamer Boo', 2350.0, NOW(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/24-big.jpg');
 INSERT INTO product (name, price, created_At, description, imageURL) VALUES ('PC Gamer Foo', 4170.0, NOW(), 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.', 'https://raw.githubusercontent.com/devsuperior/dscatalog-resources/master/backend/img/25-big.jpg');
-
 INSERT INTO product_category (product_id, category_id) VALUES (1, 2);
 INSERT INTO product_category (product_id, category_id) VALUES (2, 1);
 INSERT INTO product_category (product_id, category_id) VALUES (2, 3);
@@ -54,7 +63,6 @@ INSERT INTO product_category (product_id, category_id) VALUES (22, 3);
 INSERT INTO product_category (product_id, category_id) VALUES (23, 3);
 INSERT INTO product_category (product_id, category_id) VALUES (24, 3);
 INSERT INTO product_category (product_id, category_id) VALUES (25, 3);
-
 INSERT INTO tb_user (first_name, last_name, email, password) VALUES ('Alex', 'Brown', 'alex@gmail.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG');
 INSERT INTO tb_user (first_name, last_name, email, password) VALUES ('Maria', 'Green', 'maria@gmail.com', '$2a$10$eACCYoNOHEqXve8aIWT8Nu3PkMXWBaOxJ9aORUYzfMQCbVBIhZ8tG');
 INSERT INTO role (authority) VALUES ('ROLE_ADMIN');
