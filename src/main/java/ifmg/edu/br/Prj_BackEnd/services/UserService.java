@@ -127,7 +127,7 @@ public class UserService implements UserDetailsService {
         return user;
     }
 
-    public UserDTO signup(@Valid UserInsertDTO dto) {
+    public UserDTO signup(UserInsertDTO dto) {
         User entity = new User();
 
         copyDtoToEntity(dto, entity);

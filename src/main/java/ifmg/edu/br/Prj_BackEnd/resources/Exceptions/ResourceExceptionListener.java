@@ -1,6 +1,7 @@
 package ifmg.edu.br.Prj_BackEnd.resources.Exceptions;
 
 import ifmg.edu.br.Prj_BackEnd.services.exceptions.DataBaseException;
+import ifmg.edu.br.Prj_BackEnd.services.exceptions.EmailException;
 import ifmg.edu.br.Prj_BackEnd.services.exceptions.ResourceNotFound;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
@@ -61,6 +62,20 @@ public class ResourceExceptionListener {
         for(FieldError f : ex.getBindingResult().getFieldErrors()){
             error.addFieldMessage(f.getField(), f.getDefaultMessage());
         }
+        return ResponseEntity.status(status).body(error);
+    }
+
+    @ExceptionHandler(EmailException.class)
+    public ResponseEntity<StandartError> EmailException(EmailException ex, HttpServletRequest request) {
+        StandartError error = new StandartError();
+
+        error.setTimestamp(Instant.now());
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        error.setStatus(status.value());
+        error.setMessage(ex.getMessage());
+        error.setError("Email failed!");
+        error.setPath(request.getRequestURI());
+
         return ResponseEntity.status(status).body(error);
     }
 }

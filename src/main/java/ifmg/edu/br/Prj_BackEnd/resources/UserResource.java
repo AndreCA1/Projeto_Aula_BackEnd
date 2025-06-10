@@ -42,7 +42,6 @@ public class UserResource {
                     @ApiResponse(description = "Forbidden", responseCode = "403")
             })
     //Pageable tem todas as propridades de paginação
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<Page<UserDTO>> findAll(Pageable pageable) {
         Page<UserDTO> users = userService.findAll(pageable);
         //Nova sintaxe
@@ -60,7 +59,6 @@ public class UserResource {
                     @ApiResponse(description = "Forbidden", responseCode = "403"),
                     @ApiResponse(description = "NotFound", responseCode = "404")
             })
-    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN')")
     public ResponseEntity<UserDTO> findById(@PathVariable Long id) {
         UserDTO user = userService.findById(id);
         return ResponseEntity.ok(user);
