@@ -1,6 +1,6 @@
 package ifmg.edu.br.Prj_BackEnd.services;
 
-import ifmg.edu.br.Prj_BackEnd.dtos.EmailDto;
+import ifmg.edu.br.Prj_BackEnd.dtos.EmailDTO;
 import ifmg.edu.br.Prj_BackEnd.services.exceptions.EmailException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +18,7 @@ public class EmailService {
     @Autowired
     private JavaMailSender mailSender;
 
-    public void sendMail(EmailDto dto) {
+    public void sendMail(EmailDTO dto) {
         try{
 
             SimpleMailMessage message = new SimpleMailMessage();

@@ -1,6 +1,6 @@
 package ifmg.edu.br.Prj_BackEnd.resources;
 
-import ifmg.edu.br.Prj_BackEnd.dtos.EmailDto;
+import ifmg.edu.br.Prj_BackEnd.dtos.EmailDTO;
 import ifmg.edu.br.Prj_BackEnd.services.EmailService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class EmailResource {
     private EmailService emailService;
 
     @PostMapping
-    public ResponseEntity<Void> sendEmail(@Valid @RequestBody EmailDto dto){
+    public ResponseEntity<Void> sendEmail(@Valid @RequestBody EmailDTO dto){
         emailService.sendMail(dto);
         return ResponseEntity.noContent().build();
     }
