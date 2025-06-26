@@ -38,6 +38,7 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
     private PasswordRecoveryRepository passwordRecoveryRepository;
 
     public void createRecoverToken(ResquestTokenDTO dto) {
